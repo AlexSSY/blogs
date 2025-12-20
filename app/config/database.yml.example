@@ -1,0 +1,5 @@
+development:
+  url: "postgresql://dev:dev@localhost/devdb"
+
+production:
+  url: "postgresql://prod:prod@db/proddb"

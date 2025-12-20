@@ -8,3 +8,8 @@ wheels/
 
 # Virtual environments
 .venv
+
+# configs
+database.yml
+development.yml
+production.yml
