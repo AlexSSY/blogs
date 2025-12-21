@@ -16,3 +16,6 @@ production.yml
 
 # vscode
 .vscode/
+
+# database
+development.sqlite
