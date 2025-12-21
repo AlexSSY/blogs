@@ -1,6 +1,15 @@
-def main():
-    print("Hello from blogs!")
+import logging
+
+from starlette.applications import Starlette
+
+from app.core.settings import settings
+from app.routes.blogs import routes as base_routers
 
 
-if __name__ == "__main__":
-    main()
+logger = logging.getLogger(__name__)
+
+
+app = Starlette(
+    debug=settings.app.debug,
+    routes=base_routers
+)
