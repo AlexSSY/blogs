@@ -7,7 +7,7 @@ from sqlalchemy.orm import (
     Mapped
 )
 
-from app.core.db import Base, engine
+from app.core.database import Base, engine
 
 
 class User(Base):
