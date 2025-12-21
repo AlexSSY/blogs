@@ -1,4 +1,5 @@
 from pathlib import Path
+from pydantic import BaseModel
 import yaml
 import os
 
@@ -16,22 +17,52 @@ def get_env() -> str:
     return os.getenv("APP_ENV", "development")
 
 
-class Settings:
-    def __init__(self):
+def build_database_url(cfg: dict) -> str:
+    adapter = cfg["adapter"]
+
+    if adapter == "sqlite3":
+        return f"sqlite+aiosqlite:///{cfg['name']}"
+
+    if adapter == "mysql":
+        return (
+            f"mysql+pymysql://{cfg['username']}:{cfg['password']}"
+            f"@{cfg['host']}:{cfg['port']}/{cfg['name']}"
+        )
+
+    raise ValueError(f"Unsupported adapter: {adapter}")
+
+
+class AppConfig(BaseModel):
+    debug: bool
+    host: str
+    port: int
+
+
+class LoggingConfig(BaseModel):
+    level: str
+
+
+class Settings(BaseModel):
+    env: str
+    app: AppConfig
+    logging: LoggingConfig
+    database_url: str
+    
+    @classmethod
+    def load(cls) -> "Settings":
         env = get_env()
 
         env_config = load_yaml(f"{env}.yml")
         db_config = load_yaml("database.yml")[env]
 
-        self.env = env
+        settings = cls(
+            env=env,
+            app=env_config["app"],
+            logging=env_config["logging"],
+            database_url=build_database_url(db_config),
+        )
 
-        self.debug = env_config["app"]["debug"]
-        self.secret_key = env_config["app"]["secret_key"]
-        self.host = env_config["app"]["host"]
-        self.port = env_config["app"]["port"]
-
-        self.database_url = db_config["url"]
-        self.log_level = env_config["logging"]["level"]
+        return settings
 
 
-settings = Settings()
+settings = Settings.load()

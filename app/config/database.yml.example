@@ -1,5 +1,15 @@
 development:
-  url: "postgresql://dev:dev@localhost/devdb"
+  adapter: sqlite3
+  name: "development.sqlite"
 
 production:
-  url: "postgresql://prod:prod@db/proddb"
+  adapter: mysql
+  host: "127.0.0.1"
+  port: 3306
+  username: "admin"
+  password: "admin"
+  name: "blogs"
+
+test:
+  adapter: sqlite3
+  name: "test.sqlite"
