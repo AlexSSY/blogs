@@ -36,6 +36,7 @@ class AppConfig(BaseModel):
     debug: bool
     host: str
     port: int
+    templates_dir: str
 
 
 class LoggingConfig(BaseModel):

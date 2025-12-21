@@ -2,6 +2,7 @@ app:
   debug: true
   host: "127.0.0.1"
   port: "3000"
+  templates_dir: "templates"
 
 logging:
   level: "DEBUG"
