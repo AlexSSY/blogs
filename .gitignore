@@ -13,3 +13,6 @@ wheels/
 database.yml
 development.yml
 production.yml
+
+# vscode
+.vscode/
