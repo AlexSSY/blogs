@@ -16,6 +16,7 @@ class User(Base):
     id = mapped_column(Integer, primary_key=True, autoincrement=True)
     email: Mapped[str] = mapped_column(String(120))
     hashed_password: Mapped[str]
+    is_superuser: Mapped[bool] = mapped_column(default=False)
 
 
 async def create_tables() -> None:
