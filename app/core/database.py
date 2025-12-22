@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import (
     AsyncSession,
 )
 from sqlalchemy.orm import declarative_base
+from sqlalchemy.exc import SQLAlchemyError
 
 from .settings import settings
 
@@ -35,10 +36,11 @@ async def get_session():
     session = AsyncSessionLocal()
     try:
         yield session        
-    except Exception:
+    except SQLAlchemyError:
         await session.rollback()
+        raise
     finally:
-        session.close()
+        await session.close()
 
 
 Base = declarative_base()

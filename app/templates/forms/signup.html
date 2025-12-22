@@ -6,12 +6,12 @@
       <span>{{ form.email.errors[0] }}</span>
       {%- endif %}
       {{ form.password() }}
-      {% if form.email.errors -%}
-      <span>{{ form.email.errors[0] }}</span>
+      {% if form.password.errors -%}
+      <span>{{ form.password.errors[0] }}</span>
       {%- endif %}
       {{ form.password_confirmation() }}
-      {% if form.email.errors -%}
-      <span>{{ form.email.errors[0] }}</span>
+      {% if form.password_confirmation.errors -%}
+      <span>{{ form.password_confirmation.errors[0] }}</span>
       {%- endif %}
     </div>
     <button type="submit">Submit</button>

@@ -9,8 +9,10 @@ from app.core.settings import settings
 from app.routes.blogs import routes as base_routers
 from app.models.blogs import create_tables
 from app.core.static import static_files
+from app.core.logging import config_logger
 
 
+config_logger(settings)
 logger = logging.getLogger(__name__)
 
 
