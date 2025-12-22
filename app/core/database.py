@@ -1,4 +1,5 @@
 import logging
+from contextlib import asynccontextmanager
 
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
@@ -22,11 +23,22 @@ if settings.app.debug:
     logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
 
-AsyncSessionLocal: AsyncSession = async_sessionmaker(
+AsyncSessionLocal = async_sessionmaker(
     engine,
     class_=AsyncSession,
     expire_on_commit=False,
 )
+
+
+@asynccontextmanager
+async def get_session():
+    session = AsyncSessionLocal()
+    try:
+        yield session        
+    except Exception:
+        await session.rollback()
+    finally:
+        session.close()
 
 
 Base = declarative_base()
