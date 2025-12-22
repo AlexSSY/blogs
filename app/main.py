@@ -1,6 +1,9 @@
 import logging
 
 from starlette.applications import Starlette
+from starlette.middleware import Middleware
+from starlette.middleware.sessions import SessionMiddleware
+from starlette_wtf import CSRFProtectMiddleware
 
 from app.core.settings import settings
 from app.routes.blogs import routes as base_routers
@@ -19,7 +22,11 @@ async def lifespan(app: Starlette):
 app = Starlette(
     debug=settings.app.debug,
     routes=base_routers,
-    lifespan=lifespan
+    lifespan=lifespan,
+    middleware=(
+        Middleware(SessionMiddleware, secret_key=settings.app.secret_key), 
+        Middleware(CSRFProtectMiddleware, csrf_secret=settings.app.secret_key), 
+    )
 )
 
 app.mount('/', static_files, 'static')

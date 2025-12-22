@@ -34,8 +34,7 @@ def build_database_url(cfg: dict) -> str:
 
 class AppConfig(BaseModel):
     debug: bool
-    host: str
-    port: int
+    secret_key: str
     templates_dir: str
 
 
