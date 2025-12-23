@@ -11,7 +11,7 @@ from app.core.database import get_session
 
 def home_page(request: Request):
     return templating.TemplateResponse(
-        request, "blogs/home.html", {"hello_world": "Hello World from Jinja2."}
+        request, "pages/home.html", {"hello_world": "Hello World from Jinja2."}
     )
 
 
@@ -33,5 +33,10 @@ async def signup_page(request: Request):
         else status.HTTP_200_OK
     )
     return templating.TemplateResponse(
-        request, "forms/signup.html", {"form": signup_form}, status_code
+        request, "pages/signup.html", {"form": signup_form}, status_code
     )
+
+
+@csrf_protect
+async def login_page(request: Request):
+    pass

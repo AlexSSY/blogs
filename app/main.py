@@ -26,7 +26,7 @@ app = Starlette(
     routes=base_routers,
     lifespan=lifespan,
     middleware=(
-        Middleware(SessionMiddleware, secret_key=settings.app.secret_key), 
+        Middleware(SessionMiddleware, secret_key=settings.app.secret_key, https_only=False), 
         Middleware(CSRFProtectMiddleware, csrf_secret=settings.app.secret_key), 
     )
 )

@@ -1,0 +1,18 @@
+<form action="{{ url_for('signup_page') }}" method="post">
+  {{ form.csrf_token }}
+  <div>
+      {{ form.email() }}
+      {% if form.email.errors -%}
+      <span>{{ form.email.errors[0] }}</span>
+      {%- endif %}
+      {{ form.password() }}
+      {% if form.password.errors -%}
+      <span>{{ form.password.errors[0] }}</span>
+      {%- endif %}
+      {{ form.password_confirmation() }}
+      {% if form.password_confirmation.errors -%}
+      <span>{{ form.password_confirmation.errors[0] }}</span>
+      {%- endif %}
+    </div>
+    <button type="submit">Submit</button>
+</form>
