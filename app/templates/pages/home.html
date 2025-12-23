@@ -2,7 +2,11 @@
 
 {% block content %}
   <div class="container">
-    <h1>{{ hello_world }}</h1>
-    <a href="{{ url_for('signup_page') }}">Sign Up</a>
+    {% if request.state.user %}
+    <h3>Hello {{ request.state.user.email }}!</h3>
+    {% else %}
+    <a href="{{ url_for('signup_page') }}">Sign Up</a> or
+    <a href="{{ url_for('signin_page') }}">Sign In</a>
+    {% endif %}
   </div>
 {% endblock %}

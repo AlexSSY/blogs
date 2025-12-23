@@ -6,7 +6,9 @@ from starlette.responses import RedirectResponse
 from app.crud import users
 from app.core.templating import templating
 from app.forms.signup import SignUpForm
+from app.forms.signin import SignInForm
 from app.core.database import get_session
+from app.services import auth_service
 
 
 def home_page(request: Request):
@@ -38,5 +40,29 @@ async def signup_page(request: Request):
 
 
 @csrf_protect
-async def login_page(request: Request):
-    pass
+async def signin_page(request: Request):
+    signin_form = await SignInForm.from_formdata(request)
+
+    if await signin_form.validate_on_submit():
+        async with get_session() as session:
+            user = await auth_service.authenticate(
+                session, 
+                signin_form.email.data,
+                signin_form.password.data
+            )
+        if not user:
+            signin_form.invalidate()
+        else:
+            request.session['user_id'] = user.id
+            return RedirectResponse(
+                request.url_for("home_page"), status.HTTP_303_SEE_OTHER
+            )
+
+    status_code = (
+        status.HTTP_422_UNPROCESSABLE_CONTENT
+        if signin_form.errors
+        else status.HTTP_200_OK
+    )
+    return templating.TemplateResponse(
+        request, "pages/signin.html", {"form": signin_form}, status_code
+    )

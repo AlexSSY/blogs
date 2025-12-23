@@ -10,6 +10,7 @@ from app.routes.blogs import routes as base_routers
 from app.models.blogs import create_tables
 from app.core.static import static_files
 from app.core.logging import config_logger
+from app.middlewares.auth_middleware import AuthMiddleware
 
 
 config_logger(settings)
@@ -26,7 +27,8 @@ app = Starlette(
     routes=base_routers,
     lifespan=lifespan,
     middleware=(
-        Middleware(SessionMiddleware, secret_key=settings.app.secret_key, https_only=False), 
+        Middleware(SessionMiddleware, secret_key=settings.app.secret_key, https_only=False),
+        Middleware(AuthMiddleware),
         Middleware(CSRFProtectMiddleware, csrf_secret=settings.app.secret_key), 
     )
 )
