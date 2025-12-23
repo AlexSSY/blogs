@@ -66,3 +66,10 @@ async def signin_page(request: Request):
     return templating.TemplateResponse(
         request, "pages/signin.html", {"form": signin_form}, status_code
     )
+
+
+async def signout_page(request: Request):
+    request.session.clear()
+    return RedirectResponse(
+        request.url_for("home_page"), status.HTTP_303_SEE_OTHER
+    )

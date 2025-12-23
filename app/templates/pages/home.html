@@ -4,6 +4,9 @@
   <div class="container">
     {% if request.state.user %}
     <h3>Hello {{ request.state.user.email }}!</h3>
+    <form action="{{ request.url_for('signout_page') }}" method="post">
+      <button type="submit">Sign Out</button>
+    </form>
     {% else %}
     <a href="{{ url_for('signup_page') }}">Sign Up</a> or
     <a href="{{ url_for('signin_page') }}">Sign In</a>
