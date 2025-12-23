@@ -1,18 +1,9 @@
+{% from "macros/form_fields.html" import render_field %}
+
 <form action="{{ url_for('signup_page') }}" method="post">
   {{ form.csrf_token }}
-  <div>
-      {{ form.email() }}
-      {% if form.email.errors -%}
-      <span>{{ form.email.errors[0] }}</span>
-      {%- endif %}
-      {{ form.password() }}
-      {% if form.password.errors -%}
-      <span>{{ form.password.errors[0] }}</span>
-      {%- endif %}
-      {{ form.password_confirmation() }}
-      {% if form.password_confirmation.errors -%}
-      <span>{{ form.password_confirmation.errors[0] }}</span>
-      {%- endif %}
-    </div>
-    <button type="submit">Submit</button>
+  {{ render_field(form.email) }}
+  {{ render_field(form.password) }}
+  {{ render_field(form.password_confirmation) }}
+  <button type="submit" class="btn btn-primary">Sign In</button>
 </form>
