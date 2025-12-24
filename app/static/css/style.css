@@ -122,7 +122,7 @@ body {
     font-family: "Poppins", sans-serif;
 }
 
-.signin-form-wrapper {
+.site-form-wrapper {
     position: fixed;
     width: 100%;
     height: 40vh;
@@ -139,9 +139,9 @@ body {
     /* padding: 80px 20px 40px; */
 }
 
-.signin-form {
+.site-form {
     z-index: 1;
-    /* background-color: white; */
+    background-color: white;
     padding: 3rem;
     backdrop-filter: blur(10px);
     box-shadow: 0 0 10px rgba(0, 0, 0, .2);
@@ -150,13 +150,13 @@ body {
     margin: auto;
 }
 
-.signin-form span {
+.site-form span {
     font-size: 24px;
     text-align: center;
     display: block;
     padding: 0.5rem 0 2rem 0;
 }
 
-.signin-form button {
+.site-form button {
     width: 100%;
 }
