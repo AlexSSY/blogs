@@ -1,8 +1,8 @@
 app:
   debug: true
-  host: "127.0.0.1"
-  port: "3000"
+  secret_key: your_secret_key
   templates_dir: "templates"
+  timezone: "Europe/Kiev"
 
 logging:
   level: "DEBUG"
