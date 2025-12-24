@@ -3,6 +3,7 @@
   {{ field.label(class="form-label") }}
   {% set input_class = "form-control is-invalid" if field.errors else "form-control" %}
   {{ field(class=input_class) }}
+  {{ field.type }}
   {% if field.errors %}
     <div class="invalid-feedback">{{ field.errors[0] }}</div>
   {% endif %}
