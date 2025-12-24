@@ -27,7 +27,7 @@ async def signup_page(request: Request):
             await users.create_new_user(
                 session, signup_form.email.data, hashed_password
             )
-        return RedirectResponse(request.url_for("home_page"), status.HTTP_303_SEE_OTHER)
+        return RedirectResponse(request.url_for("signin_page"), status.HTTP_303_SEE_OTHER)
 
     status_code = (
         status.HTTP_422_UNPROCESSABLE_CONTENT

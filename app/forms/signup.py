@@ -9,7 +9,7 @@ from app.core.database import get_session
 class SignUpForm(AppForm):
     email = EmailField('Email', validators=(DataRequired(), ))
     password = PasswordField('Password', validators=(DataRequired(), ))
-    password_confirmation = PasswordField('Password', validators=(DataRequired(), ))
+    password_confirmation = PasswordField('Password Confirmation', validators=(DataRequired(), ))
 
     async def async_validate_password_confirmation(self, field):
         if field.data != self.password.data:

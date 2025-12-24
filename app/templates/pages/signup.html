@@ -1,7 +1,9 @@
 {% extends 'base/blog.html' %}
 
-{% block content %}
-  <div class="container">
-    {% include 'forms/signup.html' %}
-  </div>
+{% block body %}
+<div class="signin-form-wrapper"></div>
+<div class="signin-form">
+  <span>Sign Up</span>
+  {% include 'forms/signup.html' %}
+</div>
 {% endblock %}
