@@ -43,6 +43,21 @@ class User(Base, BaseFieldsMixin):
     hashed_password: Mapped[str]
     is_superuser: Mapped[bool] = mapped_column(default=False)
 
+    avatar_attachment: Mapped["Attachment | None"] = relationship(
+        "Attachment",
+        primaryjoin=lambda: and_(
+            foreign(Attachment.record_id) == User.id,
+            Attachment.record_type == "user",
+            Attachment.name == "avatar",
+        ),
+        uselist=False,
+        viewonly=True,
+    )
+
+    @property
+    def avatar(self):
+        return self.avatar_attachment.file if self.avatar_attachment else None
+
     # passive_deletes значит: Когда родитель удаляется, 
     # не трогай дочерние записи — БД сама всё сделает
     posts: Mapped[list["Post"]] = relationship(
@@ -153,6 +168,70 @@ class Like(Base, BaseFieldsMixin):
     __table_args__ = (
         Index("ix_likes_target", "target_type", "target_id"),
         Index("ix_likes_unique", "user_id", "target_type", "target_id", unique=True),
+    )
+
+
+class File(Base, BaseFieldsMixin):
+    __tablename__ = "files"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    filename: Mapped[str] = mapped_column(String(255), nullable=False)
+    content_type: Mapped[str] = mapped_column(String(100), nullable=False)
+
+    path: Mapped[str] = mapped_column(String(500), nullable=False)
+    size: Mapped[int] = mapped_column(nullable=False)
+
+    attachments: Mapped[list["Attachment"]] = relationship(
+        "Attachment",
+        back_populates="file",
+        passive_deletes=True,
+    )
+
+
+class Attachment(Base):
+    __tablename__ = "attachments"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    file_id: Mapped[int] = mapped_column(
+        ForeignKey("files.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
+    record_type: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,  # "user", "post", "comment"
+    )
+
+    record_id: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+    )
+
+    name: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,  # "avatar", "images"
+    )
+
+    file: Mapped["File"] = relationship(
+        "File",
+        back_populates="attachments",
+    )
+
+    is_temporary: Mapped[bool] = mapped_column(
+        default=True,
+        nullable=False,
+    )
+
+    __table_args__ = (
+        Index(
+            "ix_attachments_unique",
+            "record_type",
+            "record_id",
+            "name",
+            unique=True,
+        ),
     )
 
 
