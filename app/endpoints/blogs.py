@@ -9,6 +9,7 @@ from app.forms.signup import SignUpForm
 from app.forms.signin import SignInForm
 from app.core.database import get_session
 from app.services import auth_service
+from app.auth.decorators import login_required
 
 
 def home_page(request: Request):
@@ -72,4 +73,11 @@ async def signout_page(request: Request):
     request.session.clear()
     return RedirectResponse(
         request.url_for("home_page"), status.HTTP_303_SEE_OTHER
+    )
+
+
+@login_required
+async def profile_page(request: Request):
+    return templating.TemplateResponse(
+        request, "pages/profile.html"
     )

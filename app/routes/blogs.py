@@ -5,6 +5,7 @@ from app.endpoints.blogs import (
     signup_page,
     signin_page,
     signout_page,
+    profile_page,
 )
 
 
@@ -13,4 +14,5 @@ routes = (
     Route("/signup", signup_page, methods=("GET", "POST"), name='signup_page'),
     Route("/signin", signin_page, methods=("GET", "POST"), name='signin_page'),
     Route("/signout", signout_page, methods=("POST", ), name="signout_page"),
+    Route("/profile", profile_page, methods=("GET", ), name="profile_page"),
 )
