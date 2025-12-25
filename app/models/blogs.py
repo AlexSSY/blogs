@@ -75,7 +75,7 @@ class Post(Base, BaseFieldsMixin):
     author: Mapped[User | None] = relationship("User", back_populates="posts")
     comments: Mapped[list["Comment"]] = relationship(
         "Comment",
-        back_populates="author",
+        back_populates="post",
         passive_deletes=True,
     )
     likes: Mapped[list["Like"]] = relationship(
@@ -107,7 +107,7 @@ class Comment(Base, BaseFieldsMixin):
     parent: Mapped["Comment | None"] = relationship(
         "Comment", 
         remote_side="Comment.id",
-        back_populates="comments"
+        back_populates="children"
     )
     author: Mapped[User | None] = relationship("User", back_populates="comments")
     post: Mapped[Post | None] = relationship("Post", back_populates="comments")
