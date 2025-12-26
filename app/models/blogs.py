@@ -99,7 +99,7 @@ class Post(Base, BaseFieldsMixin):
             foreign(Like.target_id) == Post.id,
             Like.target_type == "post",
         ),
-        viewonly=True, ## polymotphic (not Native FK!!!)
+        viewonly=True, ## polymorphic (not Native FK!!!) thats why.
     )
 
 
@@ -189,7 +189,7 @@ class File(Base, BaseFieldsMixin):
     )
 
 
-class Attachment(Base):
+class Attachment(Base, BaseFieldsMixin):
     __tablename__ = "attachments"
 
     id: Mapped[int] = mapped_column(primary_key=True)

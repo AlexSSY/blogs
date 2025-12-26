@@ -7,6 +7,7 @@ from app.crud import users
 from app.core.templating import templating
 from app.forms.signup import SignUpForm
 from app.forms.signin import SignInForm
+from app.forms.posts import AddPostForm
 from app.core.database import get_session
 from app.services import auth_service
 from app.auth.decorators import login_required
@@ -80,4 +81,14 @@ async def signout_page(request: Request):
 async def profile_page(request: Request):
     return templating.TemplateResponse(
         request, "pages/profile.html"
+    )
+
+
+@login_required
+async def add_post_page(request: Request):
+    add_post_form = await AddPostForm.from_formdata(request)
+    return templating.TemplateResponse(
+        request,
+        "pages/add_post.html",
+        {"form": add_post_form}
     )
