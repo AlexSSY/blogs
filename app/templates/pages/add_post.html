@@ -6,3 +6,7 @@
     {% include "forms/add_post.html" %}
 </div>
 {% endblock %}
+
+{% block before_body_close_tag %}
+<script type="module" src="{{ url_for('static', path='/js/add_post.js') }}"></script>
+{% endblock %}
