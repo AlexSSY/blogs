@@ -11,6 +11,7 @@ from app.models.blogs import create_tables
 from app.core.static import static_files
 from app.core.logging import config_logger
 from app.middlewares.auth_middleware import AuthMiddleware
+from app.core.features import load_features
 
 
 config_logger(settings)
@@ -19,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 async def lifespan(app: Starlette):
     await create_tables()
+    await load_features()
     yield
 
 

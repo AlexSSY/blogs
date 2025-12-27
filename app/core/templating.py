@@ -1,8 +1,12 @@
 from starlette.templating import Jinja2Templates
 
-from app.core.settings import settings, BASE_DIR
+from app.core.settings import BASE_DIR
 
 
-templating = Jinja2Templates(
-    BASE_DIR / settings.app.templates_dir
-)
+class Templating:
+    def __init__(self, *dirs: str):
+        dirs = list(map(lambda dir: BASE_DIR / dir, dirs))
+        self.templating = Jinja2Templates(dirs)
+
+
+templating = Jinja2Templates("templates")

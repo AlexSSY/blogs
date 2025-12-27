@@ -37,6 +37,7 @@ class AppConfig(BaseModel):
     secret_key: str
     templates_dir: str
     timezone: str
+    features: list[str]
 
 
 class LoggingConfig(BaseModel):
