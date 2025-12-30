@@ -1,0 +1,11 @@
+{% from "macros/form_fields.html" import render_field %}
+
+<form action="{{ url_for('add_post_page') }}" method="post">
+  {{ form.csrf_token }}
+  {{ render_field(form.title) }}
+  <div class="mb-3">
+    <div id="editor" class="form-control" style="min-height: 200px"></div>
+  </div>
+  <input type="hidden" name="body" id="body">
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

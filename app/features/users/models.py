@@ -15,7 +15,7 @@ from sqlalchemy.orm import (
 )
 
 from app.core.database import Base
-from app.features.shared.mixins import BaseFieldsMixin
+from app.core.mixins import BaseFieldsMixin
 
 
 class User(Base, BaseFieldsMixin):

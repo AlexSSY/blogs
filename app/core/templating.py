@@ -23,4 +23,7 @@ features_templates_directories = list(
     filter(filter_for_existing_dirs, features_templates_directories)
 )
 
-templating = Jinja2Templates(features_templates_directories)
+templates_directories = [BASE_DIR / "core/templates"] + \
+            features_templates_directories
+
+templating = Jinja2Templates(templates_directories)

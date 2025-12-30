@@ -1,0 +1,12 @@
+{% from "macros/form_fields.html" import render_field %}
+
+<form action="{{ url_for('signup_page') }}" method="post">
+  {{ form.csrf_token }}
+  {{ render_field(form.email) }}
+  {{ render_field(form.password) }}
+  {{ render_field(form.password_confirmation) }}
+  <button type="submit" class="btn btn-primary">Sign Up</button>
+  <div class="mt-3">
+    <p class="text-center">Already have an accout? <a href="{{ url_for('signin_page') }}">Sign In</a></p>
+  </div>
+</form>
