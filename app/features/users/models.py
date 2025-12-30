@@ -15,9 +15,10 @@ from sqlalchemy.orm import (
 )
 
 from app.core.database import Base
+from app.features.shared.mixins import BaseFieldsMixin
 
 
-class User(Base):
+class User(Base, BaseFieldsMixin):
     __tablename__ = 'users'
     
     email: Mapped[str] = mapped_column(String(120))

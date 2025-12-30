@@ -1,6 +1,6 @@
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from .interfaces import AuthBackend
+from app.core.interfaces.auth import AuthBackend
 
 
 class AuthMiddleware(BaseHTTPMiddleware):
