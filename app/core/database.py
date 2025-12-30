@@ -19,7 +19,7 @@ engine = create_async_engine(
 )
 
 
-# now we see all sqlalchemy queries in debug mode
+# now we see all sqlalchemy queries when debug mode
 if settings.app.debug:
     logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
