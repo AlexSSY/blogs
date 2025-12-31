@@ -1,33 +1,20 @@
-from wtforms.validators import DataRequired
-from wtforms import EmailField, PasswordField, BooleanField, ValidationError
-from wtforms.widgets import CheckboxInput
+from pydantic import EmailStr, model_validator
 
-from app.forms.base_form import AppForm
-from app.core.database import get_session
+from app.core.forms import Form
 
 
-class SignInForm(AppForm):
-    email = EmailField('Email', validators=(DataRequired(), ))
-    password = PasswordField('Password', validators=(DataRequired(), ))
-    remember_me = BooleanField('Remember Me', widget=CheckboxInput())
-
-    def invalidate(self):
-        error_message = 'Wrong email or password.'
-        self.email.errors = [error_message]
-        self.password.errors = [error_message]
+class SignInForm(Form):
+    email: EmailStr
+    password: str
+    remember_me: bool
 
 
-class SignUpForm(AppForm):
-    email = EmailField('Email', validators=(DataRequired(), ))
-    password = PasswordField('Password', validators=(DataRequired(), ))
-    password_confirmation = PasswordField('Password Confirmation', validators=(DataRequired(), ))
+class SignUpForm(Form):
+    email: EmailStr
+    password: str
+    password_confirmation: str
 
-    async def async_validate_password_confirmation(self, field):
-        if field.data != self.password.data:
-            raise ValidationError("Passwords do not match")
-
-    # async def async_validate_email(form, field):
-    #     async with get_session() as session:
-    #         existing_user = await users.get_user_by_email(session, field.data.strip())
-    #         if existing_user is not None:
-    #             raise ValidationError('Already Exists.')
+    @model_validator(mode="after")
+    def passwords_must_be_same(self):
+        if self.password != self.password_confirmation:
+            raise ValueError("Passwords do not match")
