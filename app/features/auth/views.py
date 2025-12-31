@@ -1,15 +1,23 @@
 from starlette.requests import Request
+from starlette.endpoints import HTTPEndpoint
 from pydantic import ValidationError
 
 from app.core.templating import templating
 from .forms import SignUpForm
 
 
-async def sign_up(request: Request):
-    signup_form = SignUpForm()
-    form_errors = []
+class SignUp(HTTPEndpoint):
+    async def get(self, request: Request):
+        context = {
+            "form": SignUpForm(),
+            "form_errors": []
+        }
 
-    if request.method == "POST":
+        return templating.TemplateResponse(
+            request, "auth/signup.html", context
+        )
+
+    async def post(self, request: Request):
         form_data = await request.form()
         signup_form = SignUpForm.from_form_data(form_data)
 
@@ -19,14 +27,14 @@ async def sign_up(request: Request):
             for error in e.errors():
                 print(error)
 
-    context = {
-        "form": signup_form,
-        "form_errors": form_errors
-    }
+        context = {
+            "form": SignUpForm(),
+            "form_errors": []
+        }
 
-    return templating.TemplateResponse(
-        request, "auth/signup.html", context
-    )
+        return templating.TemplateResponse(
+            request, "auth/signup.html", context
+        )
 
 
 async def signup_page(request: Request):

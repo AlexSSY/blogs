@@ -10,6 +10,7 @@ from app.core.settings import settings
 from app.core.database import engine
 from app.core.static import static_files
 from app.core.logging import config_logger
+from app.core.security import CSRFMiddleware
 
 
 config_logger(settings)
@@ -35,6 +36,7 @@ app = Starlette(
     lifespan=lifespan,
     middleware=(
         Middleware(SessionMiddleware, secret_key=settings.app.secret_key, https_only=False),
+        Middleware(CSRFMiddleware),
         # Middleware(AuthMiddleware),
         Middleware(CSRFProtectMiddleware, csrf_secret=settings.app.secret_key), 
     )

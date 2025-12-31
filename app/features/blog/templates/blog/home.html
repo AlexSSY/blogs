@@ -4,18 +4,6 @@
   <div class="container">
     <div class="row">
       <div class="col-9">
-        {% if request.state.user %}
-        {% if posts %}
-        <ul>
-          {% for post in posts %}
-          <li>{{ post.title }}</li>
-          {% endfor %}
-        </ul>
-        {% else %}
-        <span>Hello {{ request.state.user.email }}, currently you don't have any published posts.</span>
-        <a href="{{ url_for('add_post_page') }}">Add new post.</a>
-        {% endif %}
-        {% endif %}
       </div>
       <div class="col-3"></div>
     </div>

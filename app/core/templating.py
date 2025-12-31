@@ -1,7 +1,8 @@
-import os, sys
+import os
 from starlette.templating import Jinja2Templates
 
 from app.core.settings import settings, BASE_DIR
+from app.core.security import get_csrf_token
 
 
 class Templating:
@@ -27,3 +28,4 @@ templates_directories = [BASE_DIR / "core/templates"] + \
             features_templates_directories
 
 templating = Jinja2Templates(templates_directories)
+templating.env.globals["csrf_token"] = lambda request: get_csrf_token(request.session)
