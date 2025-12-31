@@ -1,17 +1,7 @@
-from sqlalchemy import (
-    Integer,
-    String,
-    Text,
-    DateTime,
-    ForeignKey,
-    Index,
-    and_,
-)
+from sqlalchemy import String
 from sqlalchemy.orm import (
     mapped_column,
-    Mapped,
-    relationship,
-    foreign,
+    Mapped
 )
 
 from app.core.database import Base
