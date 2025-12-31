@@ -27,3 +27,15 @@ async def sign_up(request: Request):
     return templating.TemplateResponse(
         request, "auth/signup.html", context
     )
+
+
+async def signup_page(request: Request):
+    pass
+
+
+async def signin_page(request: Request):
+    pass
+
+
+async def signout_page(request: Request):
+    pass

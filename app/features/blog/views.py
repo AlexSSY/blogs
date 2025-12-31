@@ -1,9 +1,9 @@
 # from starlette_wtf import csrf_protect
 # from starlette import status
-# from starlette.requests import Request
+from starlette.requests import Request
 # from starlette.responses import RedirectResponse
 
-# from app.core.templating import templating
+from app.core.templating import templating
 # from app.forms.signup import SignUpForm
 # from app.forms.signin import SignInForm
 # from app.forms.posts import AddPostForm
@@ -91,3 +91,9 @@
 #         "pages/add_post.html",
 #         {"form": add_post_form}
 #     )
+
+
+async def home_page(request: Request):
+    return templating.TemplateResponse(
+        request, "blog/home.html"
+    )

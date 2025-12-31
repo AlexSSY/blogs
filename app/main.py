@@ -2,11 +2,11 @@ import logging
 
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
+from starlette.routing import Route
 from starlette.middleware.sessions import SessionMiddleware
 from starlette_wtf import CSRFProtectMiddleware
 
 from app.core.settings import settings
-from app.routes.blogs import routes as base_routers
 from app.core.database import engine
 from app.core.static import static_files
 from app.core.logging import config_logger
@@ -23,9 +23,15 @@ async def lifespan(app: Starlette):
     yield
 
 
+def application_routes() -> tuple[Route]:
+    from app.features.blog.routes import routes as blog_routes
+    from app.features.auth.routes import routes as auth_routes
+    return auth_routes + blog_routes
+
+
 app = Starlette(
     debug=settings.app.debug,
-    routes=base_routers,
+    routes=application_routes(),
     lifespan=lifespan,
     middleware=(
         Middleware(SessionMiddleware, secret_key=settings.app.secret_key, https_only=False),
