@@ -1,4 +1,5 @@
 import logging
+from importlib import import_module
 
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
@@ -17,22 +18,36 @@ config_logger(settings)
 logger = logging.getLogger(__name__)
 
 
-async def lifespan(app: Starlette):
+async def load_routes(app: Starlette):
+    for feature_name in settings.app.features:
+        try:
+            feature_routes_module = import_module(f"app.features.{feature_name}.routes")
+        except ModuleNotFoundError:
+            pass
+        else:
+            routes = getattr(feature_routes_module, "routes", None)
+
+            if routes is not None:
+                app.routes.extend(routes)
+        
+        logger.info(f"loaded feature: {feature_name}")
+
+
+async def create_tables():
     from app.features.users.models import Base
     async with engine.begin() as conn: 
         await conn.run_sync(Base.metadata.create_all)
+
+
+async def lifespan(app: Starlette):
+    await create_tables()
+    await load_routes(app)
     yield
-
-
-def application_routes() -> tuple[Route]:
-    from app.features.blog.routes import routes as blog_routes
-    from app.features.auth.routes import routes as auth_routes
-    return auth_routes + blog_routes
+    logger.info("app finished.")
 
 
 app = Starlette(
     debug=settings.app.debug,
-    routes=application_routes(),
     lifespan=lifespan,
     middleware=(
         Middleware(SessionMiddleware, secret_key=settings.app.secret_key, https_only=False),
@@ -42,4 +57,5 @@ app = Starlette(
     )
 )
 
-app.mount('/', static_files, 'static')
+
+app.mount('/static', static_files, 'static')

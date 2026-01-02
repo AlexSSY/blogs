@@ -9,7 +9,7 @@ from .forms import SignUpForm
 class SignUp(HTTPEndpoint):
     async def get(self, request: Request):
         context = {
-            "form": SignUpForm(),
+            "form": None,
             "form_errors": []
         }
 
@@ -18,18 +18,20 @@ class SignUp(HTTPEndpoint):
         )
 
     async def post(self, request: Request):
-        form_data = await request.form()
-        signup_form = SignUpForm.from_form_data(form_data)
+        errors = {}
 
         try:
-            signup_form.model_validate()
+            signup_form = SignUpForm.from_form_data(request.state.form)
         except ValidationError as e:
             for error in e.errors():
-                print(error)
+                for loc in error.get("loc"):
+                    old = errors.get(loc, [])
+                    old.append(error.get("msg"))
+                    errors[loc] = old
 
         context = {
-            "form": SignUpForm(),
-            "form_errors": []
+            "form": None,
+            "form_errors": errors
         }
 
         return templating.TemplateResponse(

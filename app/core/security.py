@@ -7,6 +7,8 @@ from starlette.exceptions import HTTPException
 from starlette.status import HTTP_403_FORBIDDEN
 from starlette.middleware.base import BaseHTTPMiddleware
 
+from .templating import templating
+
 
 def login_required(endpoint):
     @wraps(endpoint)
@@ -35,14 +37,14 @@ def get_csrf_token(session: dict) -> str:
     return token
 
 
-def validate_csrf(request) -> None:
+def validate_csrf(request: Request) -> None:
     session = request.session
 
     session_token = session.get(CSRF_SESSION_KEY)
     if not session_token:
         raise HTTPException(HTTP_403_FORBIDDEN, "CSRF token missing")
 
-    form = request._form  # см. ниже
+    form = request.state.form
     form_token = form.get(CSRF_FORM_FIELD)
 
     if not form_token or form_token != session_token:
@@ -52,7 +54,10 @@ def validate_csrf(request) -> None:
 class CSRFMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         if request.method in ("POST", "PUT", "PATCH", "DELETE"):
-            request._form = await request.form()
+            request.state.form = await request.form()
             validate_csrf(request)
 
         return await call_next(request)
+    
+
+templating.env.globals["csrf_token"] = lambda request: get_csrf_token(request.session)
